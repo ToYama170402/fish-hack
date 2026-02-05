@@ -1,5 +1,3 @@
-#! /usr/bin/env bash
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 create table
   ishikawa_landing_raw_data (
     year text,
@@ -36,11 +34,14 @@ create table
     amount_december text,
     amount_total text
   );
-EOSQL
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" -c "\copy ishikawa_landing_raw_data from "/docker-entrypoint-initdb.d/石川県水揚げデータ_2025_12_18.csv" with (format csv, header true, encoding 'utf8')"
+copy
+  ishikawa_landing_raw_data
+from
+  '/docker-entrypoint-initdb.d/石川県水揚げデータ_2025_12_18.csv'
+with
+  (format csv, header true, encoding 'utf8');
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 create table
   districts (
     district_cd int primary key,
@@ -269,4 +270,3 @@ from
       fishing_cd,
       stock_cd
   )
-EOSQL

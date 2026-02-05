@@ -1,0 +1,4 @@
+docker-entrypoint.initdb.d/金沢市卸市場_水産物部_冷凍魚.csv filter=lfs diff=lfs merge=lfs -text
+docker-entrypoint.initdb.d/金沢市中央卸市場_水産物部_塩干.csv filter=lfs diff=lfs merge=lfs -text
+docker-entrypoint.initdb.d/金沢市中央卸売市場_水産物部_鮮魚.csv filter=lfs diff=lfs merge=lfs -text
+docker-entrypoint.initdb.d/石川県水揚げデータ_2025_12_18.csv filter=lfs diff=lfs merge=lfs -text

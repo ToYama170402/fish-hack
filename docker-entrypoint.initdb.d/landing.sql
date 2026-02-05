@@ -269,4 +269,7 @@ from
       district_cd,
       fishing_cd,
       stock_cd
-  )
+  );
+
+drop table
+  ishikawa_landing_raw_data;

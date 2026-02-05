@@ -9,4 +9,36 @@ services:
       - "./docker-entrypoint.initdb.d:/docker-entrypoint-initdb.d"
     environment:
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: fish_hack
+    networks:
+      db:
 
+  metabase_db:
+    image: postgres:18.1-trixie
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: metabase_internal
+    networks:
+      db:
+
+
+  metabase:
+    image: metabase/metabase:latest
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase_internal
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: password
+      MB_DB_HOST: metabase_db
+    depends_on:
+      - metabase_db
+    networks:
+      db:
+
+networks:
+  db:

@@ -43,12 +43,6 @@ with
   (format csv, header true, encoding 'utf8');
 
 create table
-  districts (
-    district_cd int primary key,
-    district_name text not null
-  );
-
-create table
   fishing_categories (
     fishing_category_cd int primary key,
     fishing_category_name text not null
@@ -66,27 +60,15 @@ create table
     year int not null,
     month int not null,
     check (month between 1 and 12),
-    district_cd int not null,
+    city_code char(6),
     fishing_category_cd int not null,
     stock_cd int not null,
     quantity int not null,
     amount numeric(12, 2) not null,
-    foreign key (district_cd) references districts (district_cd),
+    foreign key (city_code) references cities (city_code),
     foreign key (fishing_category_cd) references fishing_categories (fishing_category_cd),
     foreign key (stock_cd) references stocks (stock_cd)
   );
-
-insert into
-  districts (district_cd, district_name)
-select distinct
-  cast(district_cd as integer),
-  trim(district_name)
-from
-  ishikawa_landing_raw_data
-order by
-  district_cd asc on conflict (district_cd)
-do
-  nothing;
 
 insert into
   fishing_categories (fishing_category_cd, fishing_category_name)
@@ -116,7 +98,7 @@ insert into
   landing (
     year,
     month,
-    district_cd,
+    city_code,
     fishing_category_cd,
     stock_cd,
     quantity,
@@ -125,7 +107,7 @@ insert into
 select
   cast(year as integer),
   cast(month as integer),
-  cast(district_cd as integer),
+  city_code,
   cast(fishing_cd as integer),
   cast(stock_cd as integer),
   cast(quantity as numeric),
@@ -135,7 +117,7 @@ from
     select
       year,
       '1' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_january as quantity,
@@ -146,7 +128,7 @@ from
     select
       year,
       '2' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_february as quantity,
@@ -157,7 +139,7 @@ from
     select
       year,
       '3' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_march as quantity,
@@ -168,7 +150,7 @@ from
     select
       year,
       '4' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_april as quantity,
@@ -179,7 +161,7 @@ from
     select
       year,
       '5' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_may as quantity,
@@ -190,7 +172,7 @@ from
     select
       year,
       '6' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_june as quantity,
@@ -201,7 +183,7 @@ from
     select
       year,
       '7' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_july as quantity,
@@ -212,7 +194,7 @@ from
     select
       year,
       '8' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_august as quantity,
@@ -223,7 +205,7 @@ from
     select
       year,
       '9' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_september as quantity,
@@ -234,7 +216,7 @@ from
     select
       year,
       '10' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_october as quantity,
@@ -245,7 +227,7 @@ from
     select
       year,
       '11' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_november as quantity,
@@ -256,20 +238,22 @@ from
     select
       year,
       '12' as month,
-      district_cd,
+      district_name,
       fishing_cd,
       stock_cd,
       quantity_december as quantity,
       amount_december as amount
     from
       ishikawa_landing_raw_data
-    order by
-      year,
-      month,
-      district_cd,
-      fishing_cd,
-      stock_cd
-  );
+  )
+  left outer join cities on district_name = cities.name
+order by
+  year,
+  month,
+  city_code,
+  fishing_cd,
+  stock_cd;
+
 
 drop table
   ishikawa_landing_raw_data;

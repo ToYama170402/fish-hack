@@ -2,6 +2,35 @@
 
 本レポジトリは、[FISH×TECHハッカソン #いしかわの海の幸をアプデせよ](https://techplay.jp/event/989316)で提供されるデータをPostgreSQLに格納するコードを管理、提供します。なおこのレポジトリの作者[ToYama](https://github.com/ToYama170402)はFISH×TECHハッカソンには参加しておりません。
 
+データ分析/可視化ツールに[Metabase](metabase.com)を導入してあります。
+
+## 環境構築
+
+```bash
+git clone https://github.com/ToYama170402/fish-hack.git
+cd fish-hack
+docker compose up -d # Dockerコンテナを起動
+```
+
+### Metabaseのセットアップ
+
+データ分析/可視化ツールに[Metabase](metabase.com)
+
+1. `localhost:3000`にアクセス
+2. `開始しましょう`クリック
+3. ログイン用の諸情報を入力して`次へ`
+4. 適当に利用目的を選択して`次へ`
+5. 以下の通りにデータベースを追加する
+  - データベース：`PostgreSQL`
+  - 表示名：`fish_hack`
+  - ホスト：`db`
+  - ポート：`5432`
+  - データベース名：`fish_hack`
+  - ユーザー名：`postgres`
+  - パスワード：`password`
+6. `終了`をクリック
+7. `Metabaseを始める`クリック
+
 ## ER図
 
 以下はデータベースのER図（Mermaid）です。

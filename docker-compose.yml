@@ -7,6 +7,7 @@ services:
       - "5432:5432"
     volumes:
       - "./docker-entrypoint.initdb.d:/docker-entrypoint-initdb.d"
+      - "fish_hack_db:/var/lib/postgresql"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: fish_hack
@@ -20,6 +21,8 @@ services:
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: metabase_internal
+    volumes:
+      - "metabase_db:/var/lib/postgresql"
     networks:
       db:
 
@@ -39,6 +42,10 @@ services:
       - metabase_db
     networks:
       db:
+
+volumes:
+  fish_hack_db:
+  metabase_db:
 
 networks:
   db:
